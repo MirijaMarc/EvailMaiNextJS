@@ -25,6 +25,22 @@ interface V_devis{
     fin : Date
 }
 
+export async function montantTotalEffectue(){
+    const montantTotal : any = await prisma.$queryRaw`
+    select COALESCE(SUM(montant - reste),0) somme from v_devis
+    `;
+    await new Promise((resolve)=>setTimeout(resolve, 2000));
+    return montantTotal[0].somme ?? 0;
+}
+
+
+export async function montantTotalDevis(){
+    const montantTotal : any= await prisma.$queryRaw`
+    SELECT COALESCE(sum(montant),0) somme FROM deviss
+    `;
+    await new Promise((resolve)=>setTimeout(resolve, 2000));
+    return montantTotal[0].somme ?? 0;
+}
 
 export async function fetchDevis(){
     const dataDevisByUser = await prisma.$queryRaw<V_devis[]>`
