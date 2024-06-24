@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model devis_csv {
+  id            Int    @id @default(autoincrement())
+  client        String @db.VarChar(255)
+  ref_devis     String @db.VarChar(255)
+  type_maison   String @db.VarChar(255)
+  finition      String @db.VarChar(255)
+  taux_finition String @db.VarChar(255)
+  date_devis    String @db.VarChar(255)
+  date_debut    String @db.VarChar(255)
+  lieu          String @db.VarChar(255)
+}
+
+model devis_travaux {
+  id_devis_travaux Int       @id @default(autoincrement())
+  iddevis          Int?
+  idtravaux        Int?
+  prix_unitaire    Float
+  quantite         Float
+  deviss           deviss?   @relation(fields: [iddevis], references: [id_devis], onDelete: NoAction, onUpdate: NoAction)
+  travauxs         travauxs? @relation(fields: [idtravaux], references: [id_travaux], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([iddevis, idtravaux])
+}
+
+model deviss {
+  id_devis           Int              @id @default(autoincrement())
+  reference          String           @db.VarChar(255)
+  idmaison           Int?
+  idfinition         Int?
+  iduser             Int?
+  montant            Float
+  finition           Float
+  duree              Float
+  date_devis         DateTime?        @default(now()) @db.Timestamp(6)
+  date_debut_travaux DateTime?        @db.Date
+  lieu               String?          @db.VarChar(255)
+  etat_devis         Int              @default(0)
+  devis_travaux      devis_travaux[]
+  finitions          finitions?       @relation(fields: [idfinition], references: [id_finition], onDelete: NoAction, onUpdate: NoAction)
+  maisons            maisons?         @relation(fields: [idmaison], references: [id_maison], onDelete: NoAction, onUpdate: NoAction)
+  users              users?           @relation(fields: [iduser], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+  payement_devis     payement_devis[]
+}
+
+model finitions {
+  id_finition   Int      @id @default(autoincrement())
+  nom_finition  String   @db.VarChar(255)
+  marge         Float
+  etat_finition Int      @default(0)
+  deviss        deviss[]
+}
+
+model maisons {
+  id_maison          Int               @id @default(autoincrement())
+  nom_maison         String            @db.VarChar(255)
+  description_maison String
+  etat_maison        Int               @default(0)
+  surface            Float?
+  duree_construction Float
+  deviss             deviss[]
+  maisons_travaux    maisons_travaux[]
+}
+
+model maisons_travaux {
+  id_maison_travaux Int       @id @default(autoincrement())
+  idmaison          Int?
+  idtravaux         Int?
+  quantite          Float?
+  maisons           maisons?  @relation(fields: [idmaison], references: [id_maison], onDelete: NoAction, onUpdate: NoAction)
+  travauxs          travauxs? @relation(fields: [idtravaux], references: [id_travaux], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([idmaison, idtravaux])
+}
+
+model maisons_travaux_csv {
+  id            Int    @id @default(autoincrement())
+  type_maison   String @db.VarChar(255)
+  description   String @db.VarChar(255)
+  surface       String @db.VarChar(255)
+  code_travaux  String @db.VarChar(255)
+  type_travaux  String @db.VarChar(255)
+  unite         String @db.VarChar(255)
+  prix_unitaire String @db.VarChar(255)
+  quantite      String @db.VarChar(255)
+  duree_travaux String @db.VarChar(255)
+}
+
+model paiement_csv {
+  id            Int    @id @default(autoincrement())
+  ref_devis     String @db.VarChar(255)
+  ref_paiement  String @db.VarChar(255)
+  date_paiement String @db.VarChar(255)
+  montant       String @db.VarChar(255)
+}
+
+model payement_devis {
+  id_payement_devis   Int      @id @default(autoincrement())
+  reference           String   @db.VarChar(255)
+  iddevis             Int?
+  montant             Float
+  date_payement       DateTime @db.Timestamp(6)
+  etat_payement_devis Int      @default(0)
+  deviss              deviss?  @relation(fields: [iddevis], references: [id_devis], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model travauxs {
+  id_travaux      Int               @id @default(autoincrement())
+  idtype_travaux  Int?
+  code_travaux    String            @db.VarChar(255)
+  nom_travaux     String            @db.VarChar(255)
+  unite_travaux   Int?
+  prix_unitaire   Float?
+  etat_travaux    Int               @default(0)
+  devis_travaux   devis_travaux[]
+  maisons_travaux maisons_travaux[]
+  type_travaux    type_travaux?     @relation(fields: [idtype_travaux], references: [id_type_travaux], onDelete: NoAction, onUpdate: NoAction)
+  unites          unites?           @relation(fields: [unite_travaux], references: [id_unite], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model type_travaux {
+  id_type_travaux   Int        @id @default(autoincrement())
+  code_type_travaux String     @db.VarChar(255)
+  nom_type_travaux  String     @db.VarChar(255)
+  etat_type_travaux Int        @default(0)
+  travauxs          travauxs[]
+}
+
+model unites {
+  id_unite   Int        @id @default(autoincrement())
+  nom_unite  String     @db.VarChar(255)
+  etat_unite Int        @default(0)
+  travauxs   travauxs[]
+}
+
+model users {
+  id_user   Int      @id @default(autoincrement())
+  email     String?  @unique @db.VarChar(255)
+  numero    String?  @unique @db.VarChar(255)
+  password  String?  @unique @db.VarChar(255)
+  role      Int      @default(1)
+  etat_user Int      @default(0)
+  deviss    deviss[]
+}
