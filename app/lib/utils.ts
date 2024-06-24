@@ -1,3 +1,13 @@
+
+
+export function listerAnnees(debut : number, fin : number) {
+    const listeAnnees = [];
+    for (let i = fin; i >= debut; i--) {
+      listeAnnees.push(i);
+    }
+    return listeAnnees;
+  }
+
 export function toDateFrancais(date : Date){
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric', // Affiche l'année avec 4 chiffres
