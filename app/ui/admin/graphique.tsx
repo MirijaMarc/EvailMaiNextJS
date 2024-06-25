@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import 'chart.js/auto';
 import { FormEvent, useEffect, useState } from 'react';
 import { fetchDevis, getStatsByAnnee } from '@/app/lib/data';
-import { ListeSkeleton } from '../skeleton';
+import { GraphiqueSkeleton, ListeSkeleton } from '../skeleton';
 import { listerAnnees } from '@/app/lib/utils';
 const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), {
   ssr: false,
@@ -106,9 +106,7 @@ export default function ChartDevis() {
         <div className="card-body">
             <h5 className="card-title">Histogramme des devis</h5>
             {load == true ?(
-                <div className='m-5'>
-                    <ListeSkeleton />
-                </div>
+                <GraphiqueSkeleton />
             ): (
                 <Bar data={dataChart}/>
             )}

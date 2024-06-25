@@ -62,7 +62,7 @@ export async function montantTotalEffectue(){
     const montantTotal : any = await prisma.$queryRaw`
     select COALESCE(SUM(montant - reste),0) somme from v_devis
     `;
-    // await new Promise((resolve)=>setTimeout(resolve, 2000));
+    // await new Promise((resolve)=>setTimeout(resolve, 20000));
     return montantTotal[0].somme ?? 0;
 }
 
@@ -94,7 +94,7 @@ export async function fetchDevis(){
     JOIN finitions f ON f.id_finition = vd.idfinition
     JOIN users u ON id_user = iduser
     `
-    // await new Promise((resolve)=>setTimeout(resolve, 2000));
+    await new Promise((resolve)=>setTimeout(resolve, 2000));
     return dataDevisByUser;
 
 }
@@ -105,7 +105,7 @@ export async function fetchTravaux(){
             unites : true
         }
     });
-    // await new Promise(resolve=>setTimeout(resolve, 2000))
+    await new Promise(resolve=>setTimeout(resolve, 2000))
     return data;
 
 }
@@ -131,7 +131,7 @@ export async function fetchDevisByUser(idUser : number){
     JOIN users u ON id_user = iduser
     WHERE vd.iduser = ${idUser}
     `
-    // await new Promise((resolve)=>setTimeout(resolve, 2000));
+    await new Promise((resolve)=>setTimeout(resolve, 5000));
     return dataDevisByUser;
 
 }
@@ -139,14 +139,14 @@ export async function fetchDevisByUser(idUser : number){
 export async function fetchFinition() {
     
     const dataFinition = await prisma.finitions.findMany()
-    // await new Promise(resolve => setTimeout(resolve,2000));
+    await new Promise(resolve => setTimeout(resolve,5000));
     return dataFinition;
 }
 
 export async function fetchTypeMaison(){
     
     const dataType= await prisma.$queryRaw<Maison[]>`SELECT * FROM v_prix_maisons`;
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     return dataType;
 
 }

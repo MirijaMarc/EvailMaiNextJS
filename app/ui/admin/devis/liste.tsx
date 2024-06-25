@@ -12,7 +12,7 @@ export default async function ListeDevis(){
         
                     <div id="elementPDF" className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Liste Finitions</h5>
+                            <h5 className="card-title">Liste Devis</h5>
                             <div className="table-responsive">
                                 <table className="table table-hover">
                                 <thead>
