@@ -6,7 +6,7 @@ import ListeTypeMaison from "@/app/ui/client/devis/card-type-maison";
 import CardTypeMaison from "@/app/ui/client/devis/card-type-maison";
 import Header from "@/app/ui/header";
 import NavBar from "@/app/ui/nav-bar";
-import { ListeSkeleton } from "@/app/ui/skeleton";
+import { ListeSkeleton, WrapperFinitionSkeleton, WrapperTypeMaisonSkeleton } from "@/app/ui/skeleton";
 import { Suspense } from "react";
 
 
@@ -23,7 +23,7 @@ export default async function NewDevis(){
         <input type="hidden" value="1" name="utilisateur" />
             <div className="row mt-5">
                 <h2 className="mb-3">Choisir un type de Maison</h2>
-                <Suspense fallback={<ListeSkeleton />}>
+                <Suspense fallback={<WrapperTypeMaisonSkeleton />}>
                     <ListeTypeMaison />
                 </Suspense>
             </div>
@@ -32,7 +32,7 @@ export default async function NewDevis(){
 
             <div className="row mt-5">
                 <h2 className="mb-3">Choisir une Finition</h2>
-                <Suspense fallback={<ListeSkeleton />}>
+                <Suspense fallback={<WrapperFinitionSkeleton />}>
                     <ListeFinition />
                 </Suspense>
             </div>
